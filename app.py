@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# Load the trained Random Forest model
 rf_model = joblib.load('loan_predictor_model.pkl')
 
 st.title("Loan Approval Predictor")
@@ -45,3 +44,7 @@ if st.button("Predict Loan Status"):
 if st.checkbox("Show Input Data"):
     st.write("Input Data for Prediction:")
     st.dataframe(input_data)
+
+
+st.markdown("---")
+st.write("Created by Mayur Vijay Dumbre")  
