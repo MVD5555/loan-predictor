@@ -41,7 +41,7 @@ st.title("Loan Approval Predictor")
 st.write("Enter the applicant details below to predict loan approval status.")
 
 
-st.image("https://cdn-icons-png.flaticon.com/512/2820/2820728.png", width=100)  # Bank/loan icon
+
 st.markdown("<p style='text-align: center; color: #7f8c8d;'>A simple loan prediction tool</p>", unsafe_allow_html=True)
 
 
