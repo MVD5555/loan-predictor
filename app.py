@@ -2,49 +2,14 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-
+# Load the model
 rf_model = joblib.load('loan_predictor_model.pkl')
 
-
-st.markdown("""
-    <style>
-    /* Background color for the app */
-    .stApp {
-        background-color: #f0f4f8;  /* Light blue-gray */
-    }
-    /* Title color */
-    h1 {
-        color: #2c3e50;  /* Dark blue */
-    }
-    /* Subheader color */
-    h2 {
-        color: #2980b9;  /* Medium blue */
-    }
-    /* Button styling */
-    .stButton>button {
-        background-color: #3498db;  /* Blue */
-        color: white;
-        border-radius: 5px;
-    }
-    /* Footer styling */
-    .footer {
-        text-align: center;
-        font-size: 14px;
-        color: #7f8c8d;  /* Gray */
-        margin-top: 20px;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-
+# Title
 st.title("Loan Approval Predictor")
 st.write("Enter the applicant details below to predict loan approval status.")
 
-
-
-st.markdown("<p style='text-align: center; color: #7f8c8d;'>A simple loan prediction tool</p>", unsafe_allow_html=True)
-
-
+# Input section
 st.subheader("Applicant Details")
 no_of_dependents = st.slider("Number of Dependents", min_value=0, max_value=5, value=2, step=1)
 education = st.selectbox("Education Level", ["Graduate", "Not Graduate"])
@@ -60,7 +25,7 @@ commercial_assets_value = st.number_input("Commercial Assets Value", min_value=0
 luxury_assets_value = st.number_input("Luxury Assets Value", min_value=0, value=10000000, step=100000)
 bank_asset_value = st.number_input("Bank Asset Value", min_value=0, value=3000000, step=100000)
 
-
+# Prepare input data
 input_data = pd.DataFrame({
     'no_of_dependents': [no_of_dependents],
     'education': [0 if education == "Graduate" else 1],
@@ -75,21 +40,21 @@ input_data = pd.DataFrame({
     'bank_asset_value': [bank_asset_value]
 })
 
-
+# Prediction button
 if st.button("Predict Loan Status"):
     pred = rf_model.predict(input_data)
     result = "Approved" if pred[0] == 0 else "Rejected"
     st.success(f"Loan Status: **{result}**")
 
-
+# Debug option
 if st.checkbox("Show Input Data"):
     st.write("Input Data for Prediction:")
     st.dataframe(input_data)
 
-
+# Footer with your name and GitHub link
 st.markdown("---")
 st.markdown(
-    "<div class='footer'>Created by Mayur Vijay Dumbre | "
+    "<div>Created by Mayur Vijay Dumbre | "
     "<a href='https://github.com/MVD5555' target='_blank'>GitHub</a></div>",
     unsafe_allow_html=True
 )
