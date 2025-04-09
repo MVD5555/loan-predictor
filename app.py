@@ -25,9 +25,10 @@ commercial_assets_value = st.number_input("Commercial Assets Value", min_value=0
 luxury_assets_value = st.number_input("Luxury Assets Value", min_value=0, value=10000000, step=100000)
 bank_asset_value = st.number_input("Bank Asset Value", min_value=0, value=3000000, step=100000)
 
-# Calculate total assets
-total_assets = (residential_assets_value + commercial_assets_value +
-                luxury_assets_value + bank_asset_value)
+# Calculate total assets with integer casting
+total_assets = int(residential_assets_value + commercial_assets_value +
+                   luxury_assets_value + bank_asset_value)
+print(f"Income: {income_annum}, Total Assets: {total_assets}")  # Debug print
 
 # Prepare input data
 input_data = pd.DataFrame({
@@ -47,7 +48,9 @@ input_data = pd.DataFrame({
 # Prediction button
 if st.button("Predict Loan Status"):
     pred = rf_model.predict(input_data)
-    # New logic: Reject if income is 0 and total assets are 0, otherwise use model prediction
+    print(f"Model Prediction: {pred[0]}")  # Debug print
+    # Enhanced logic with debug
+    print(f"Income Check: {income_annum == 0}, Assets Check: {total_assets == 0}")
     if income_annum == 0 and total_assets == 0:
         result = "Rejected (No Income and No Assets)"
     else:
