@@ -52,24 +52,27 @@ if st.button("Predict Loan Status"):
     # Enhanced logic with debug
     print(f"Income Check: {income_annum == 0}, Assets Check: {total_assets == 0}, Loan-to-Income Ratio: {loan_amount / income_annum if income_annum > 0 else 'N/A'}")
     
+    # Pre-evaluate rejection factors
     if income_annum == 0 and total_assets == 0:
         result = "Rejected (No Income and No Assets)"
         reason = "Loan rejected because the applicant has no income and no assets."
-    elif income_annum > 0 and loan_amount / income_annum > 10:  # Loan-to-income ratio check
+    elif income_annum > 0 and loan_amount / income_annum >= 10:  # Stricter threshold
         result = "Rejected (Excessive Loan Amount)"
         reason = f"Loan rejected because the loan amount ({loan_amount:,} INR) exceeds 10 times the annual income ({income_annum:,} INR)."
+    elif cibil_score < 600 or (loan_amount / total_assets > 5 if total_assets > 0 else False) or (income_annum / loan_amount < 0.1 if loan_amount > 0 else False):
+        result = "Rejected"
+        reasons = []
+        if cibil_score < 600:
+            reasons.append("CIBIL score is below 600.")
+        if loan_amount / total_assets > 5 if total_assets > 0 else False:
+            reasons.append("Loan amount exceeds 5 times the total assets.")
+        if income_annum / loan_amount < 0.1 if loan_amount > 0 else False:
+            reasons.append("Annual income is less than 10% of the loan amount.")
+        reason = "Loan rejected due to: " + ", ".join(reasons)
     else:
         result = "Approved" if pred[0] == 0 else "Rejected"
         if result == "Rejected":
-            # Infer reason based on feature thresholds
-            reasons = []
-            if cibil_score < 600:  # Common threshold for good credit
-                reasons.append("CIBIL score is below 600.")
-            if loan_amount / total_assets > 5 if total_assets > 0 else False:  # Loan-to-asset ratio
-                reasons.append("Loan amount exceeds 5 times the total assets.")
-            if income_annum / loan_amount < 0.1 if loan_amount > 0 else False:  # Income-to-loan ratio
-                reasons.append("Annual income is less than 10% of the loan amount.")
-            reason = "Loan rejected due to: " + ", ".join(reasons) if reasons else "Loan rejected based on model evaluation (unknown specific factor)."
+            reason = "Loan rejected based on model evaluation (unknown specific factor)."
         else:
             reason = ""
 
