@@ -73,8 +73,8 @@ if st.button("Predict Loan Status"):
         else:
             reason = ""
 
-    # Display result with red color for rejection
-    if result == "Rejected":
+    # Display result with red color for all rejection cases
+    if "Rejected" in result:
         st.markdown(f"<p style='color:red;'><b>Loan Status: {result}</b></p>", unsafe_allow_html=True)
         st.write(reason)
     else:
